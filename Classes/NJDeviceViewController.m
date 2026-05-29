@@ -66,7 +66,21 @@
     self.noDevicesNotice.hidden = anyDevices || !self.hidStoppedNotice.isHidden;
 }
 
+- (void)configureInputsTree {
+    if (!self.inputsTree)
+        return;
+    self.inputsTree.rowHeight = 20.0;
+    self.inputsTree.intercellSpacing = NSMakeSize(4, 0);
+    if (@available(macOS 11.0, *))
+        self.inputsTree.style = NSTableViewStylePlain;
+}
+
+- (void)awakeFromNib {
+    [self configureInputsTree];
+}
+
 - (void)hidStarted {
+    [self configureInputsTree];
     self.noDevicesNotice.hidden = !![self.delegate numberOfDevicesInDeviceList:self];
     self.hidStoppedNotice.hidden = YES;
 }
@@ -151,7 +165,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView
         isGroupItem:(NJInputPathElement *)item {
-    return !item.parent;
+    return NO;
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView

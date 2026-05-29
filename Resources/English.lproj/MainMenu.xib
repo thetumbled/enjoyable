@@ -624,8 +624,8 @@ aW5nLg</string>
 															<reference key="NSTableView" ref="365506042"/>
 														</object>
 													</array>
-													<double key="NSIntercellSpacingWidth">3</double>
-													<double key="NSIntercellSpacingHeight">2</double>
+													<double key="NSIntercellSpacingWidth">4</double>
+													<double key="NSIntercellSpacingHeight">0</double>
 													<object class="NSColor" key="NSBackgroundColor" id="214000480">
 														<int key="NSColorSpace">3</int>
 														<bytes key="NSWhite">MQA</bytes>
@@ -639,7 +639,7 @@ aW5nLg</string>
 															<bytes key="NSWhite">MC41AA</bytes>
 														</object>
 													</object>
-													<double key="NSRowHeight">22</double>
+													<double key="NSRowHeight">20</double>
 													<int key="NSTvFlags">306184192</int>
 													<reference key="NSDelegate"/>
 													<reference key="NSDataSource"/>
@@ -648,7 +648,7 @@ aW5nLg</string>
 													<int key="NSDraggingSourceMaskForNonLocal">0</int>
 													<bool key="NSAllowsTypeSelect">YES</bool>
 													<int key="NSTableViewDraggingDestinationStyle">0</int>
-													<int key="NSTableViewGroupRowStyle">1</int>
+													<int key="NSTableViewGroupRowStyle">0</int>
 													<int key="NSTableViewRowSizeStyle">-1</int>
 													<bool key="NSOutlineViewAutoresizesOutlineColumnKey">NO</bool>
 												</object>
