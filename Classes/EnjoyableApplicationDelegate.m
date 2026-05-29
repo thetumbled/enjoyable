@@ -10,6 +10,7 @@
 #import "NJMapping.h"
 #import "NJInput.h"
 #import "NJEvents.h"
+#import "NJPermissions.h"
 
 @implementation EnjoyableApplicationDelegate {
     NSStatusItem *statusItem;
@@ -58,6 +59,17 @@
         [self transformIntoElement:nil];
     else
         [self.window makeKeyAndOrderFront:nil];
+
+    [self performSelector:@selector(checkPermissionsOnLaunch)
+               withObject:nil
+               afterDelay:0.5];
+}
+
+- (void)checkPermissionsOnLaunch {
+    if (![NJPermissions hasAccessibilityPermission]
+        || ![NJPermissions hasInputMonitoringPermission]) {
+        [NJPermissions ensureRequiredPermissionsWithPrompt:YES];
+    }
 }
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication
@@ -431,6 +443,12 @@
 }
 
 - (IBAction)simulatingEventsChanged:(NSButton *)sender {
+    if (sender.state == NSOnState) {
+        if (![NJPermissions ensureRequiredPermissionsWithPrompt:YES]) {
+            sender.state = NSOffState;
+            return;
+        }
+    }
     self.ic.simulatingEvents = sender.state == NSOnState;
 }
 

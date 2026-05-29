@@ -12,7 +12,10 @@
 
 @interface NJDevice : NJInputPathElement
 
+/// Returns nil for devices that should not be listed (e.g. macOS synthetic GamePad).
 - (id)initWithDevice:(IOHIDDeviceRef)device;
+
++ (BOOL)shouldIgnoreHIDDevice:(IOHIDDeviceRef)device;
 
 @property (nonatomic, assign) int index;
 @property (nonatomic, assign) IOHIDDeviceRef device;

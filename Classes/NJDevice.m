@@ -60,15 +60,46 @@ static NSArray *InputsForElement(IOHIDDeviceRef device, id parent) {
     return children;
 }
 
+static NSString *NJSanitizedProductName(NSString *product) {
+    NSMutableString *s = [[product stringByTrimmingCharactersInSet:
+                           [NSCharacterSet whitespaceAndNewlineCharacterSet]] mutableCopy];
+    if (!s.length)
+        return @"Unknown";
+    [s replaceOccurrencesOfString:@":" withString:@"_"
+                          options:0
+                            range:NSMakeRange(0, s.length)];
+    [s replaceOccurrencesOfString:@"~" withString:@"_"
+                          options:0
+                            range:NSMakeRange(0, s.length)];
+    return s;
+}
+
 @implementation NJDevice {
     int _vendorId;
     int _productId;
+    NSString *_productName;
+}
+
++ (BOOL)shouldIgnoreHIDDevice:(IOHIDDeviceRef)dev {
+    NSString *transport = (__bridge NSString *)IOHIDDeviceGetProperty(dev, CFSTR(kIOHIDTransportKey));
+    if (transport.length > 0)
+        return NO;
+    NSString *product = (__bridge NSString *)IOHIDDeviceGetProperty(dev, CFSTR(kIOHIDProductKey));
+    product = [product stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    // macOS AppleGCSyntheticDevice (e.g. GamePad-1) — not a separate physical controller.
+    if ([product hasPrefix:@"GamePad"])
+        return YES;
+    return NO;
 }
 
 - (id)initWithDevice:(IOHIDDeviceRef)dev {
+    if ([NJDevice shouldIgnoreHIDDevice:dev])
+        return nil;
+
     NSString *name = (__bridge NSString *)IOHIDDeviceGetProperty(dev, CFSTR(kIOHIDProductKey));
     if ((self = [super initWithName:name eid:nil parent:nil])) {
         self.device = dev;
+        _productName = name ?: @"";
         _vendorId = [(__bridge NSNumber *)IOHIDDeviceGetProperty(dev, CFSTR(kIOHIDVendorIDKey)) intValue];
         _productId = [(__bridge NSNumber *)IOHIDDeviceGetProperty(dev, CFSTR(kIOHIDProductIDKey)) intValue];
         self.children = InputsForElement(dev, self);
@@ -77,17 +108,37 @@ static NSArray *InputsForElement(IOHIDDeviceRef device, id parent) {
     return self;
 }
 
+- (NSString *)productKey {
+    return [NSString stringWithFormat:@"%@:%04x:%04x",
+            NJSanitizedProductName(_productName),
+            _vendorId & 0xffff,
+            _productId & 0xffff];
+}
+
 - (BOOL)isEqual:(id)object {
-    return [object isKindOfClass:NJDevice.class]
-        && [[(NJDevice *)object name] isEqualToString:self.name];
+    if (![object isKindOfClass:NJDevice.class])
+        return NO;
+    NJDevice *other = object;
+    return _vendorId == other->_vendorId
+        && _productId == other->_productId
+        && [[self productKey] isEqualToString:[other productKey]];
 }
 
 - (NSString *)name {
-    return [NSString stringWithFormat:@"%@ #%d", super.name, _index];
+    NSString *display = [_productName stringByTrimmingCharactersInSet:
+                         [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if (!display.length)
+        display = @"Unknown";
+    if (_index <= 1)
+        return display;
+    return [NSString stringWithFormat:@"%@ #%d", display, _index];
 }
 
 - (NSString *)uid {
-    return [NSString stringWithFormat:@"%d:%d:%d", _vendorId, _productId, _index];
+    NSString *key = [self productKey];
+    if (_index > 1)
+        return [NSString stringWithFormat:@"%@:%d", key, _index];
+    return key;
 }
 
 - (NJInput *)findInputByCookie:(IOHIDElementCookie)cookie {

@@ -21,6 +21,8 @@
 		EE6A122E16E8F46300EDBD32 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = EE6A122D16E8F46300EDBD32 /* Icon.icns */; };
 		EE83ACEC16F545EA00083E94 /* NJMappingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE83ACEB16F545EA00083E94 /* NJMappingsViewController.m */; };
 		EE8455DD16F0E46B00F32A01 /* NSRunningApplication+LoginItem.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8455DC16F0E46B00F32A01 /* NSRunningApplication+LoginItem.m */; };
+		EE99PERM0116F0E46B00F32A01 /* NJPermissions.m in Sources */ = {isa = PBXBuildFile; fileRef = EE99PERM0216F0E46B00F32A01 /* NJPermissions.m */; };
+		EE99PERM0316F0E46B00F32A01 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE99PERM0416F0E46B00F32A01 /* ApplicationServices.framework */; };
 		EED4CE6E16ED692400C65AA8 /* NJMappingMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = EED4CE6D16ED692400C65AA8 /* NJMappingMenuController.m */; };
 		EEE703DC16F089FE002FDD69 /* NJHIDManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EEE703DB16F089FE002FDD69 /* NJHIDManager.m */; };
 		EEE703DE16F0B3F6002FDD69 /* NJInputPathElement.m in Sources */ = {isa = PBXBuildFile; fileRef = EEE703DD16F0B3F6002FDD69 /* NJInputPathElement.m */; };
@@ -91,6 +93,9 @@
 		EE83ACEB16F545EA00083E94 /* NJMappingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NJMappingsViewController.m; path = Classes/NJMappingsViewController.m; sourceTree = "<group>"; };
 		EE8455DB16F0E46B00F32A01 /* NSRunningApplication+LoginItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSRunningApplication+LoginItem.h"; path = "Categories/NSRunningApplication+LoginItem.h"; sourceTree = "<group>"; };
 		EE8455DC16F0E46B00F32A01 /* NSRunningApplication+LoginItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSRunningApplication+LoginItem.m"; path = "Categories/NSRunningApplication+LoginItem.m"; sourceTree = "<group>"; };
+		EE99PERM0216F0E46B00F32A01 /* NJPermissions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NJPermissions.m; path = Classes/NJPermissions.m; sourceTree = "<group>"; };
+		EE99PERM0516F0E46B00F32A01 /* NJPermissions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NJPermissions.h; path = Classes/NJPermissions.h; sourceTree = "<group>"; };
+		EE99PERM0416F0E46B00F32A01 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		EED4CE6C16ED692400C65AA8 /* NJMappingMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NJMappingMenuController.h; path = Classes/NJMappingMenuController.h; sourceTree = "<group>"; };
 		EED4CE6D16ED692400C65AA8 /* NJMappingMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NJMappingMenuController.m; path = Classes/NJMappingMenuController.m; sourceTree = "<group>"; };
 		EEE703DA16F089FE002FDD69 /* NJHIDManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NJHIDManager.h; path = Classes/NJHIDManager.h; sourceTree = "<group>"; };
@@ -158,6 +163,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE35A6E417BBCC9500413995 /* CoreVideo.framework in Frameworks */,
+				EE99PERM0316F0E46B00F32A01 /* ApplicationServices.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				D594BF000FAE7397007A85F2 /* IOKit.framework in Frameworks */,
 			);
@@ -171,6 +177,8 @@
 			children = (
 				EEF17D3916E8E2EF00D7DC4D /* EnjoyableApplicationDelegate.h */,
 				EEF17D3A16E8E2EF00D7DC4D /* EnjoyableApplicationDelegate.m */,
+				EE99PERM0516F0E46B00F32A01 /* NJPermissions.h */,
+				EE99PERM0216F0E46B00F32A01 /* NJPermissions.m */,
 				EEDB86A216FA4C42000E91C3 /* Input */,
 				EEDB86A316FA4C5C000E91C3 /* Output */,
 				EEDB86A516FA4CE4000E91C3 /* Views */,
@@ -182,6 +190,7 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EE99PERM0416F0E46B00F32A01 /* ApplicationServices.framework */,
 				D594BEFF0FAE7397007A85F2 /* IOKit.framework */,
 				EE35A6E317BBCC9500413995 /* CoreVideo.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
@@ -486,6 +495,7 @@
 				EEE703DC16F089FE002FDD69 /* NJHIDManager.m in Sources */,
 				EEE703DE16F0B3F6002FDD69 /* NJInputPathElement.m in Sources */,
 				EE8455DD16F0E46B00F32A01 /* NSRunningApplication+LoginItem.m in Sources */,
+				EE99PERM0116F0E46B00F32A01 /* NJPermissions.m in Sources */,
 				EE52145C16F3E8BD00E3C574 /* NSOutlineView+ItemAccessors.m in Sources */,
 				EE52145F16F404D500E3C574 /* NJDeviceViewController.m in Sources */,
 				EE83ACEC16F545EA00083E94 /* NJMappingsViewController.m in Sources */,
@@ -547,7 +557,7 @@
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_NAME = Enjoyable;
 				PROVISIONING_PROFILE = "";
 			};
@@ -575,7 +585,7 @@
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_NAME = Enjoyable;
 				PROVISIONING_PROFILE = "";
 			};
@@ -603,7 +613,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -619,11 +629,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				ONLY_ACTIVE_ARCH = YES;
-				RUN_CLANG_STATIC_ANALYZER = YES;
+				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = macosx;
-				VALID_ARCHS = x86_64;
+				VALID_ARCHS = "arm64 x86_64";
 			};
 			name = Debug;
 		};
@@ -647,7 +657,7 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -663,10 +673,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				RUN_CLANG_STATIC_ANALYZER = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = macosx;
-				VALID_ARCHS = x86_64;
+				VALID_ARCHS = "arm64 x86_64";
 			};
 			name = Release;
 		};

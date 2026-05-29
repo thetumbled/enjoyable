@@ -10,6 +10,9 @@
 
 #import <CoreServices/CoreServices.h>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 static const UInt32 RESOLVE_FLAGS = kLSSharedFileListNoUserInteraction
                                   | kLSSharedFileListDoNotMountVolumes;
 
@@ -85,5 +88,6 @@ static const UInt32 RESOLVE_FLAGS = kLSSharedFileListNoUserInteraction
     return [parentInfo[@"FileCreator"] isEqualToString:@"lgnw"];
 }
 
+#pragma clang diagnostic pop
 
 @end

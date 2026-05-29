@@ -167,6 +167,8 @@ static CVReturn _updateDL(CVDisplayLinkRef displayLink,
 
 - (void)HIDManager:(NJHIDManager *)manager deviceAdded:(IOHIDDeviceRef)device {
     NJDevice *match = [[NJDevice alloc] initWithDevice:device];
+    if (!match)
+        return;
     [self addDevice:match];
     [self.delegate inputController:self didAddDevice:match];
 }
