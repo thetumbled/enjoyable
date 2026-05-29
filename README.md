@@ -1,58 +1,45 @@
-Enjoyable is an application for Mac OS X which allows you to use
-controller inputs like a mouse or keyboard.
+# Enjoyable（Mac 手柄映射）
 
-If you've ever played a video game which only supports mouse and
-keyboard input but you want to use a joystick or gamepad, then
-Enjoyable will help you do that.
+将游戏手柄映射为键盘/鼠标，供仅支持键鼠的 Mac 游戏使用。
 
-Enjoyable supports
+本仓库为 **维护中的补丁 fork**，基于 [shirosaki/enjoyable](https://github.com/shirosaki/enjoyable) v1.2.1（上游作者 Joe Wreschnig 等，见 [LICENSE](LICENSE)）。
 
- * Mapping gamepad and joystick buttons to keyboard and mouse actions
- * Fine control over mouse movement and scrolling using analog axis
-   inputs
- * Automatic and dynamic switching between different input mappings
- * Downloading and sharing input presets for different applications
- * Modern OS X features like resume and automatic termination
+## 本 fork 主要改动
 
-Enjoyable is free software written by Joe Wreschnig and is based on
-the Enjoy codebase written by [Yifeng Huang](http://nongraphical.com)
-and [Sam McCall](http://abstractable.net/enjoy/).
+- 双手柄 UID：`产品名:VID:PID`，避免同款 Xbox 360 ID 冲突  
+- 过滤 macOS 虚拟 `GamePad-*` 节点  
+- 辅助功能权限提示与启动/停止按钮 UI  
+- 适配较新 macOS（含 Apple Silicon 编译、崩溃修复）  
 
-## How to Use
+详见 [PATCH-NOTES.md](PATCH-NOTES.md)。**踩坑与排错**见 [TROUBLESHOOTING.md](TROUBLESHOOTING.md)。
 
-To start, just press a button on your joystick or gamepad, then press
-the key you want to map it for. Then press the ▶ button and switch
-back to your game. For more details, Enjoyable has a in-application
-manual available in Help Viewer via `⌘?`.
+## 编译安装
 
-## Requirements
+需要完整 **Xcode**（非仅 Command Line Tools）。
 
-* Mac OS X 10.7+
-* One or more HID-compatible (e.g. USB or Bluetooth) input devices
+```bash
+chmod +x build_and_install.sh
+./build_and_install.sh
+```
 
-## License
+安装目标：`/Applications/Enjoyable.app`。
 
-Copyright 2013 Joe Wreschnig  
-          2012 Yifeng Huang  
-          2009 Sam McCall, University of Otago
+安装后请在 **系统设置 → 隐私与安全性 → 辅助功能** 中授权；若重装后权限失效，见 [TROUBLESHOOTING.md](TROUBLESHOOTING.md#2-重装后权限明明开了仍提示无权限)。
 
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
+## 使用要点
 
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
+1. 连接手柄，在 Enjoyable 中配置映射  
+2. 点 **▶ 启动**  
+3. **切换到游戏窗口** 再操作手柄  
+4. 与 Steam Input 不要同时用于同一游戏；玩 Overcooked 2 建议完全退出 Steam  
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+## 需求
 
-The joystick icon is from the Tango icon set and is public domain.
+- macOS 10.13+（本 fork 在 Apple Silicon / macOS 26 上验证）  
+- USB 或蓝牙 HID 手柄  
+
+## 许可
+
+MIT License。完整条文与上游版权说明见 [LICENSE](LICENSE)。
+
+应用内 **关于** 窗口不再展示原作者署名行；法律要求的版权声明保留在 `LICENSE` 及源码文件头中。

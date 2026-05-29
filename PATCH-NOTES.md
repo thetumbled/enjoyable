@@ -1,44 +1,51 @@
-# Enjoyable 补丁说明（产品名 + VID + PID）
+# 补丁说明
 
 基于 [shirosaki/enjoyable](https://github.com/shirosaki/enjoyable) v1.2.1。
 
-## 变更
+排错与踩坑清单见 **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)**。
+
+## 代码变更
 
 ### `Classes/NJDevice.m`
 
-1. **设备 UID** 由 `VID:PID:index` 改为 **`{产品名}:{VID}:{PID}`**（十六进制 VID/PID）。
-   - 示例：`Controller:045e:028e` 与 `BEITONG_A1N2_XINPUT_GAMEPAD:045e:028e` 不再冲突。
-   - 换 USB 口仍有效（未使用 LocationID）。
-2. **同名同型号第二只手柄** 仍用 `:index` 后缀，例如 `BEITONG...:045e:028e:2`。
-3. **忽略** macOS `AppleGCSyntheticDevice`（`GamePad-1`、无 Transport），列表只保留物理 USB 手柄。
+1. 设备 UID：`VID:PID:index` → **`{产品名}:{VID}:{PID}`**（十六进制 VID/PID）  
+2. 同名同型号第二只手柄：`:index` 后缀，如 `BEITONG...:045e:028e:2`  
+3. 忽略 `AppleGCSyntheticDevice`（`GamePad-*`、无 Transport）
 
 ### `Classes/NJInputController.m`
 
-- `initWithDevice:` 返回 `nil` 时不再加入设备列表。
+- `initWithDevice:` 返回 `nil` 时不加入设备列表
 
-### `Classes/NJPermissions.m`（新增）
+### `Classes/NJPermissions.m`
 
-- 启动时与点击 ▶ 启用模拟时，检查 **辅助功能** 与 **输入监控** 权限。
-- 缺失时弹出系统提示并引导打开「系统设置 → 隐私与安全性」。
-- 原版 Enjoyable **不会** 自动请求这些权限，无权限时 `CGEventPost` 会静默失败，映射看起来「已启用但不生效」。
+- 启用映射前检查 **辅助功能**（不反复调用系统 TCC 弹窗）  
+- 启动时不自动弹权限框  
 
-## 使用注意
+### `Classes/EnjoyableApplicationDelegate.m`
 
-1. **必须授予两项权限**：辅助功能（模拟键盘）、输入监控（读取手柄）。
-2. 授权后 **完全退出并重启 Enjoyable**（⌘Q，不要只关窗口）。
-3. 点击 ▶ 后，**切换到游戏窗口** 再按手柄——Enjoyable 在前台时只用于配置映射，不会向其他应用发送按键。
-4. 玩 Overcooked 2 时 **完全退出 Steam**，避免与 Enjoyable 抢输入。
+- 工具栏启动/停止按钮：绘制为图片、清除 toolbar 旧缓存  
+- 权限与按钮状态联动  
 
-## 编译安装
+### `Classes/NJDeviceViewController.m`
 
-```bash
-chmod +x build_and_install.sh
-./build_and_install.sh
-```
+- 手柄列表改为紧凑普通行（非 group item）
 
-需要已安装 **Xcode**（非仅 Command Line Tools）。
+### `Categories/NSRunningApplication+NJPossibleNames.m`
 
-## 注意
+- `frontWindowTitle` 为空时返回 `nil`（修复 macOS 26 切换应用崩溃）
 
-- 升级后 **旧映射档键名变化**，需在 Enjoyable 里重新映射手柄按键。
-- 两只 **完全相同型号** 的手柄仍会共用前缀，第二只占 `:2` 后缀。
+### 工程 / 构建
+
+- `VALID_ARCHS = arm64 x86_64`，`MACOSX_DEPLOYMENT_TARGET = 10.13`  
+- `build_and_install.sh`：安装前退出旧进程、ad-hoc 签名  
+
+## 映射升级
+
+补丁后 **旧映射档键名变化**，需在 Enjoyable 里重新配置。
+
+## 文档
+
+| 文件 | 内容 |
+|------|------|
+| [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | 权限、Steam、UI、双手柄等踩坑 |
+| [LICENSE](LICENSE) | MIT 许可与上游版权 |
