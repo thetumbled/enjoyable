@@ -346,7 +346,7 @@
 					<bool key="NSToolbarPrefersToBeShown">YES</bool>
 					<bool key="NSToolbarShowsBaselineSeparator">YES</bool>
 					<bool key="NSToolbarAllowsUserCustomization">NO</bool>
-					<bool key="NSToolbarAutosavesConfiguration">YES</bool>
+					<bool key="NSToolbarAutosavesConfiguration">NO</bool>
 					<int key="NSToolbarDisplayMode">2</int>
 					<int key="NSToolbarSizeMode">1</int>
 					<dictionary class="NSMutableDictionary" key="NSToolbarIBIdentifiedItems">
@@ -360,7 +360,7 @@
 							<object class="NSButton" key="NSToolbarItemView" id="385218002">
 								<nil key="NSNextResponder"/>
 								<int key="NSvFlags">268</int>
-								<string key="NSFrame">{{7, 14}, {36, 25}}</string>
+								<string key="NSFrame">{{0, 14}, {88, 25}}</string>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="NSEnabled">YES</bool>
 								<object class="NSButtonCell" key="NSCell" id="422366518">
@@ -376,10 +376,6 @@
 									<reference key="NSControlView" ref="385218002"/>
 									<int key="NSButtonFlags">-1228128256</int>
 									<int key="NSButtonFlags2">163</int>
-									<object class="NSCustomResource" key="NSNormalImage" id="80448349">
-										<string key="NSClassName">NSImage</string>
-										<string key="NSResourceName">NSRightFacingTriangleTemplate</string>
-									</object>
 									<string key="NSAlternateContents"/>
 									<string key="NSKeyEquivalent"/>
 									<int key="NSPeriodicDelay">200</int>
@@ -387,11 +383,11 @@
 								</object>
 								<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 							</object>
-							<reference key="NSToolbarItemImage" ref="80448349"/>
+							<nil key="NSToolbarItemImage"/>
 							<nil key="NSToolbarItemTarget"/>
 							<nil key="NSToolbarItemAction"/>
-							<string key="NSToolbarItemMinSize">{36, 25}</string>
-							<string key="NSToolbarItemMaxSize">{36, 25}</string>
+							<string key="NSToolbarItemMinSize">{88, 25}</string>
+							<string key="NSToolbarItemMaxSize">{130, 25}</string>
 							<bool key="NSToolbarItemEnabled">YES</bool>
 							<bool key="NSToolbarItemAutovalidates">YES</bool>
 							<int key="NSToolbarItemTag">0</int>
@@ -3162,7 +3158,7 @@ aW5nLg</string>
 					<object class="IBToolTipAttribute" key="NS.object.0">
 						<string key="name">ToolTip</string>
 						<reference key="object" ref="385218002"/>
-						<string key="toolTip">Enable mapped actions</string>
+						<string key="toolTip">Start gamepad mapping</string>
 					</object>
 				</object>
 				<string key="872.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>

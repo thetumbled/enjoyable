@@ -94,8 +94,9 @@
 		EE8455DB16F0E46B00F32A01 /* NSRunningApplication+LoginItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSRunningApplication+LoginItem.h"; path = "Categories/NSRunningApplication+LoginItem.h"; sourceTree = "<group>"; };
 		EE8455DC16F0E46B00F32A01 /* NSRunningApplication+LoginItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSRunningApplication+LoginItem.m"; path = "Categories/NSRunningApplication+LoginItem.m"; sourceTree = "<group>"; };
 		EE99PERM0216F0E46B00F32A01 /* NJPermissions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NJPermissions.m; path = Classes/NJPermissions.m; sourceTree = "<group>"; };
-		EE99PERM0516F0E46B00F32A01 /* NJPermissions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NJPermissions.h; path = Classes/NJPermissions.h; sourceTree = "<group>"; };
 		EE99PERM0416F0E46B00F32A01 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+		EE99PERM0516F0E46B00F32A01 /* NJPermissions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NJPermissions.h; path = Classes/NJPermissions.h; sourceTree = "<group>"; };
+		EE99ZHNS0116F0E46B00F32A01 /* zh-Hans */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "Resources/zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		EED4CE6C16ED692400C65AA8 /* NJMappingMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NJMappingMenuController.h; path = Classes/NJMappingMenuController.h; sourceTree = "<group>"; };
 		EED4CE6D16ED692400C65AA8 /* NJMappingMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NJMappingMenuController.m; path = Classes/NJMappingMenuController.m; sourceTree = "<group>"; };
 		EEE703DA16F089FE002FDD69 /* NJHIDManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NJHIDManager.h; path = Classes/NJHIDManager.h; sourceTree = "<group>"; };
@@ -401,6 +402,7 @@
 				Japanese,
 				French,
 				German,
+				"zh-Hans",
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* Enjoy */;
 			projectDirPath = "";
@@ -510,6 +512,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				EE1F3CE916EF4182008C6426 /* English */,
+				EE99ZHNS0116F0E46B00F32A01 /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

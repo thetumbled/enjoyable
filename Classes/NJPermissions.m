@@ -9,25 +9,9 @@
     return AXIsProcessTrusted();
 }
 
-+ (BOOL)requestAccessibilityPermission {
-    if ([self hasAccessibilityPermission])
-        return YES;
-    NSDictionary *options = @{(__bridge id)kAXTrustedCheckOptionPrompt: @YES};
-    return AXIsProcessTrustedWithOptions((__bridge CFDictionaryRef)options);
-}
-
 + (BOOL)hasInputMonitoringPermission {
     if (@available(macOS 10.15, *))
         return CGPreflightListenEventAccess();
-    return YES;
-}
-
-+ (BOOL)requestInputMonitoringPermission {
-    if (@available(macOS 10.15, *)) {
-        if (CGPreflightListenEventAccess())
-            return YES;
-        return CGRequestListenEventAccess();
-    }
     return YES;
 }
 
@@ -51,52 +35,39 @@
     }
 }
 
-+ (BOOL)ensureRequiredPermissionsWithPrompt:(BOOL)prompt {
-    BOOL accessibility = prompt
-        ? [self requestAccessibilityPermission]
-        : [self hasAccessibilityPermission];
-    BOOL inputMonitoring = prompt
-        ? [self requestInputMonitoringPermission]
-        : [self hasInputMonitoringPermission];
-
-    if (accessibility && inputMonitoring)
++ (BOOL)ensureAccessibilityForSimulation {
+    if ([self hasAccessibilityPermission])
         return YES;
 
-    if (!prompt)
-        return NO;
-
-    NSMutableArray *missing = [NSMutableArray array];
-    if (!accessibility)
-        [missing addObject:NSLocalizedString(
-            @"Accessibility (辅助功能)", @"Missing permission name")];
-    if (!inputMonitoring)
-        [missing addObject:NSLocalizedString(
-            @"Input Monitoring (输入监控)", @"Missing permission name")];
-
-    NSString *message = [NSString stringWithFormat:
-        NSLocalizedString(
-            @"Enjoyable needs the following permissions to read gamepads and "
-            @"simulate keyboard input:\n\n%@\n\n"
-            @"Open System Settings, enable Enjoyable for each item, then quit "
-            @"and reopen Enjoyable.",
-            @"Missing permissions alert message"),
-        [missing componentsJoinedByString:@"\n"]];
+    NSString *message = NSLocalizedString(
+        @"Enjoyable needs Accessibility permission to simulate keyboard input.\n\n"
+        @"Open System Settings → Privacy & Security → Accessibility, "
+        @"enable Enjoyable, then quit (⌘Q) and reopen.\n\n"
+        @"If Enjoyable is already listed but mapping still fails, remove it "
+        @"from the list with −, add it again with +, then restart. "
+        @"This is often needed after reinstalling the app.",
+        @"Accessibility permission alert message");
 
     NSAlert *alert = [[NSAlert alloc] init];
     alert.messageText = NSLocalizedString(
-        @"Permissions Required", @"Missing permissions alert title");
+        @"Accessibility Permission Required",
+        @"Accessibility permission alert title");
     alert.informativeText = message;
     [alert addButtonWithTitle:NSLocalizedString(@"Open Settings", nil)];
     [alert addButtonWithTitle:NSLocalizedString(@"Later", nil)];
 
-    if ([alert runModal] == NSAlertFirstButtonReturn) {
-        if (!accessibility)
-            [self openAccessibilitySettings];
-        else
-            [self openInputMonitoringSettings];
-    }
+    if ([alert runModal] == NSAlertFirstButtonReturn)
+        [self openAccessibilitySettings];
 
     return NO;
+}
+
++ (BOOL)ensureRequiredPermissionsWithPrompt:(BOOL)prompt {
+    if ([self hasAccessibilityPermission])
+        return YES;
+    if (!prompt)
+        return NO;
+    return [self ensureAccessibilityForSimulation];
 }
 
 @end

@@ -54,6 +54,11 @@ fi
 echo "==> 可执行文件: $(file "$BINARY")"
 
 echo "==> 安装到 $INSTALL_PATH ..."
+if pgrep -xq Enjoyable; then
+    echo "    正在退出正在运行的 Enjoyable..."
+    osascript -e 'tell application "Enjoyable" to quit' 2>/dev/null || true
+    sleep 1
+fi
 if [[ -d "$INSTALL_PATH" ]]; then
     rm -rf "$INSTALL_PATH"
 fi
@@ -67,7 +72,9 @@ echo ""
 echo "完成: $INSTALL_PATH"
 echo ""
 echo "首次打开若被拦截: 右键 Enjoyable → 打开"
-echo "需在 系统设置 → 隐私与安全性 中授予「辅助功能」和「输入监控」"
+echo "需在 系统设置 → 隐私与安全性 中授予「辅助功能」"
+echo "每次运行 build_and_install.sh 重装后，若权限失效："
+echo "  辅助功能列表中 − 删除 Enjoyable，再 + 重新添加"
 echo ""
 echo "本构建变更:"
 echo "  - 设备 UID = 产品名:VID:PID（换 USB 口仍有效）"

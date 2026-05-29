@@ -3,12 +3,12 @@
 @interface NJPermissions : NSObject
 
 + (BOOL)hasAccessibilityPermission;
-+ (BOOL)requestAccessibilityPermission;
-
 + (BOOL)hasInputMonitoringPermission;
-+ (BOOL)requestInputMonitoringPermission;
 
-/// Returns NO if any required permission is missing after prompting.
+/// Accessibility is required to simulate keyboard input.
++ (BOOL)ensureAccessibilityForSimulation;
+
+/// Returns NO if Accessibility is missing. Does not call system TCC prompt APIs.
 + (BOOL)ensureRequiredPermissionsWithPrompt:(BOOL)prompt;
 
 + (void)openAccessibilitySettings;

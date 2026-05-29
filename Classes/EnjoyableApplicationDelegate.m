@@ -17,6 +17,12 @@
     NSMutableArray *_errors;
 }
 
+static NSString * const kSimulationToolbarItemID =
+    @"2CB21E35-9CF1-4C67-9670-31139C914D10";
+static NSString * const kToolbarLayoutVersionKey =
+    @"com.yukkurigames.Enjoyable.simulationToolbarLayoutVersion";
+static NSString * const kToolbarLayoutVersion = @"3";
+
 - (void)didSwitchApplication:(NSNotification *)note {
     NSRunningApplication *activeApp = note.userInfo[NSWorkspaceApplicationKey];
     if (activeApp)
@@ -63,13 +69,144 @@
     [self performSelector:@selector(checkPermissionsOnLaunch)
                withObject:nil
                afterDelay:0.5];
+
+    [self performSelector:@selector(configureSimulatingEventsButton)
+               withObject:nil
+               afterDelay:0.1];
+    [self performSelector:@selector(configureSimulatingEventsButton)
+               withObject:nil
+               afterDelay:0.5];
+}
+
+- (void)windowDidBecomeMain:(NSNotification *)notification {
+    [self configureSimulatingEventsButton];
+}
+
+- (void)resetSimulationToolbarLayoutIfNeeded {
+    NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
+    if ([[defaults stringForKey:kToolbarLayoutVersionKey] isEqualToString:kToolbarLayoutVersion])
+        return;
+
+    NSToolbar *toolbar = self.window.toolbar;
+    if (toolbar.identifier.length) {
+        NSString *configKey = [NSString stringWithFormat:@"NSToolbar Configuration %@",
+                               toolbar.identifier];
+        [defaults removeObjectForKey:configKey];
+    }
+
+    [defaults setObject:kToolbarLayoutVersion forKey:kToolbarLayoutVersionKey];
+}
+
+- (NSImage *)simulationButtonImageRunning:(BOOL)running {
+    NSString *label = running
+        ? NSLocalizedString(@"Stop", @"toolbar button to stop mapping")
+        : NSLocalizedString(@"Start", @"toolbar button to start mapping");
+    NSString *title = running
+        ? [NSString stringWithFormat:@"■ %@", label]
+        : [NSString stringWithFormat:@"▶ %@", label];
+    NSColor *textColor = running
+        ? NSColor.systemRedColor
+        : [NSColor colorWithCalibratedRed:0.08 green:0.45 blue:0.18 alpha:1.0];
+    NSFont *font = [NSFont systemFontOfSize:12 weight:NSFontWeightSemibold];
+    NSDictionary *attrs = @{
+        NSFontAttributeName: font,
+        NSForegroundColorAttributeName: textColor,
+    };
+
+    NSSize textSize = [title sizeWithAttributes:attrs];
+    CGFloat padX = 12.0;
+    NSSize size = NSMakeSize(MAX(textSize.width + padX * 2, 80), 24);
+
+    return [NSImage imageWithSize:size flipped:NO drawingHandler:^BOOL(NSRect rect) {
+        NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:NSInsetRect(rect, 0.5, 0.5)
+                                                             xRadius:rect.size.height / 2.0
+                                                             yRadius:rect.size.height / 2.0];
+        [NSColor.controlBackgroundColor setFill];
+        [path fill];
+        [NSColor.separatorColor setStroke];
+        [path setLineWidth:1.0];
+        [path stroke];
+        NSPoint point = NSMakePoint(padX, floor((rect.size.height - textSize.height) / 2.0));
+        [title drawAtPoint:point withAttributes:attrs];
+        return YES;
+    }];
+}
+
+- (void)updateSimulatingEventsButtonAppearance {
+    NSButton *button = self.simulatingEventsButton;
+    if (!button)
+        return;
+
+    BOOL running = self.ic.simulatingEvents;
+    button.toolTip = running
+        ? NSLocalizedString(@"stop mapping tooltip", @"tooltip when mapping is on")
+        : NSLocalizedString(@"start mapping tooltip", @"tooltip when mapping is off");
+
+    button.title = @"";
+    button.alternateTitle = @"";
+    button.attributedTitle = nil;
+    button.contentTintColor = nil;
+    button.imagePosition = NSImageOnly;
+    button.image = [self simulationButtonImageRunning:running];
+    button.alternateImage = nil;
+
+    NSSize imageSize = button.image.size;
+    NSRect frame = button.frame;
+    frame.size.width = imageSize.width + 4;
+    frame.size.height = MAX(imageSize.height + 2, 25);
+    button.frame = frame;
+    [button setNeedsDisplay:YES];
+}
+
+- (void)configureSimulatingEventsButton {
+    NSButton *button = self.simulatingEventsButton;
+    if (!button)
+        return;
+
+    [self resetSimulationToolbarLayoutIfNeeded];
+
+    [button setButtonType:NSButtonTypeMomentaryPushIn];
+    button.bezelStyle = NSBezelStyleShadowlessSquare;
+    button.bordered = NO;
+    button.imagePosition = NSImageOnly;
+    button.title = @"";
+
+    NSToolbar *toolbar = self.window.toolbar;
+    NSToolbarItem *item = nil;
+    if (toolbar) {
+        for (NSToolbarItem *candidate in toolbar.items) {
+            if ([candidate.itemIdentifier isEqualToString:kSimulationToolbarItemID]
+                || candidate.view == button) {
+                item = candidate;
+                break;
+            }
+        }
+    }
+    if (item) {
+        item.image = nil;
+        item.label = @"";
+    }
+
+    [self updateSimulatingEventsButtonAppearance];
+
+    if (item) {
+        NSSize imageSize = button.image.size;
+        CGFloat width = MAX(imageSize.width + 8, 88);
+        item.minSize = NSMakeSize(width, 25);
+        item.maxSize = NSMakeSize(width + 24, 25);
+        if (item.view) {
+            NSRect frame = item.view.frame;
+            frame.size.width = width;
+            frame.size.height = 25;
+            item.view.frame = frame;
+        }
+        [toolbar validateVisibleItems];
+    }
 }
 
 - (void)checkPermissionsOnLaunch {
-    if (![NJPermissions hasAccessibilityPermission]
-        || ![NJPermissions hasInputMonitoringPermission]) {
-        [NJPermissions ensureRequiredPermissionsWithPrompt:YES];
-    }
+    // Do not call system TCC prompt APIs on launch — ad-hoc resign after
+    // reinstall often invalidates cached grants until the user re-adds the app.
 }
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication
@@ -120,7 +257,7 @@
 }
 
 - (void)eventSimulationStarted:(NSNotification *)note {
-    self.simulatingEventsButton.state = NSOnState;
+    [self updateSimulatingEventsButtonAppearance];
     statusItem.image = [NSImage imageNamed:@"Status Menu Icon"];
     [NSProcessInfo.processInfo
         disableAutomaticTermination:@"Event simulation running."];
@@ -132,7 +269,7 @@
 }
 
 - (void)eventSimulationStopped:(NSNotification *)note {
-    self.simulatingEventsButton.state = NSOffState;
+    [self updateSimulatingEventsButtonAppearance];
     statusItem.image = [NSImage imageNamed:@"Status Menu Icon Disabled"];
     [NSProcessInfo.processInfo
         enableAutomaticTermination:@"Event simulation running."];
@@ -442,14 +579,16 @@
     return self.ic.devices[idx];
 }
 
-- (IBAction)simulatingEventsChanged:(NSButton *)sender {
-    if (sender.state == NSOnState) {
+- (IBAction)simulatingEventsChanged:(id)sender {
+    BOOL wantOn = !self.ic.simulatingEvents;
+    if (wantOn) {
         if (![NJPermissions ensureRequiredPermissionsWithPrompt:YES]) {
-            sender.state = NSOffState;
+            [self updateSimulatingEventsButtonAppearance];
             return;
         }
     }
-    self.ic.simulatingEvents = sender.state == NSOnState;
+    self.ic.simulatingEvents = wantOn;
+    [self updateSimulatingEventsButtonAppearance];
 }
 
 - (void)outputViewController:(NJOutputViewController *)ovc
